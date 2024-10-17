@@ -43,7 +43,7 @@ public class ParcoursUnitTest
         mockFactory.Setup(facto=>facto.ParcoursRepository()).Returns(mockParcours.Object);
         
         // Création du use case en utilisant le mock comme datasource
-        CreateParcoursUseCase useCase=new CreateParcoursUseCase(mockFactory.Object);
+        CreateParcoursUseCase useCase=new CreateParcoursUseCase(mockFactory.Object.ParcoursRepository());
         
         // Appel du use case
         var parcoursTeste=await useCase.ExecuteAsync(parcoursAvant);

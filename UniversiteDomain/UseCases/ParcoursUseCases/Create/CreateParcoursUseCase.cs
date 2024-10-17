@@ -1,5 +1,6 @@
 using UniversiteDomain.DataAdapters;
 using UniversiteDomain.Entities;
+using UniversiteDomain.Exceptions.ParcoursExceptions;
 
 namespace UniversiteDomain.UseCases.ParcoursUseCases.Create;
 
@@ -23,5 +24,10 @@ public class CreateParcoursUseCase(IParcoursRepository parcoursRepository)
         ArgumentNullException.ThrowIfNull(parcours.NomParcours);
         ArgumentNullException.ThrowIfNull(parcours.AnneeFormation);
         ArgumentNullException.ThrowIfNull(parcoursRepository);
+        
+        List<Parcours> existe = await parcoursRepository.FindByConditionAsync(e=>e.NomParcours.Equals(parcours.NomParcours));
+        
+        if (existe .Any()) throw new DuplicateInscripionException(parcours.NomParcours+ " - ce numéro d'étudiant est déjà affecté à un étudiant");
+
     }
 }
