@@ -24,6 +24,7 @@ public class EtudiantUnitTest
         
         // On crée l'étudiant qui doit être ajouté en base
         Etudiant etudiantSansId = new Etudiant{NumEtud=numEtud, Nom = nom, Prenom=prenom, Email=email};
+        
         //  Créons le mock du repository
         // On initialise une fausse datasource qui va simuler un EtudiantRepository
         var mock = new Mock<IEtudiantRepository>();
@@ -36,7 +37,9 @@ public class EtudiantUnitTest
         var reponseFindByCondition = new List<Etudiant>();
         // On crée un bouchon dans le mock pour la fonction FindByCondition
         // Quelque soit le paramètre de la fonction FindByCondition, on renvoie la liste vide
-        mock.Setup(repo=>repo.FindByConditionAsync(It.IsAny<Expression<Func<Etudiant, bool>>>())).ReturnsAsync(reponseFindByCondition);
+        mock
+            .Setup(repo=>repo.FindByConditionAsync(It.IsAny<Expression<Func<Etudiant, bool>>>()))
+            .ReturnsAsync(reponseFindByCondition);
         
         // Simulation de la fonction Create
         // On lui dit que l'ajout d'un étudiant renvoie un étudiant avec l'Id 1

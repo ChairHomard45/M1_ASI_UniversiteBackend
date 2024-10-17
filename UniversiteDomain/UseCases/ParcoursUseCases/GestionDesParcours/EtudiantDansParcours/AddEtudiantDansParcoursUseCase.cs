@@ -3,7 +3,7 @@ using UniversiteDomain.Entities;
 using UniversiteDomain.Exceptions.EtudiantExceptions;
 using UniversiteDomain.Exceptions.ParcoursExceptions;
 
-namespace UniversiteDomain.UseCases.ParcoursUseCases.EtudiantDansParcours;
+namespace UniversiteDomain.UseCases.ParcoursUseCases.GestionDesParcours.EtudiantDansParcours;
 
 public class AddEtudiantDansParcoursUseCase(IRepositoryFactory repositoryFactory)
 {
@@ -23,6 +23,8 @@ public class AddEtudiantDansParcoursUseCase(IRepositoryFactory repositoryFactory
       // Rajout de plusieurs étudiants dans un parcours
       public async Task<Parcours> ExecuteAsync(Parcours parcours, List<Etudiant> etudiants)
       {
+          ArgumentNullException.ThrowIfNull(etudiants);
+          ArgumentNullException.ThrowIfNull(parcours);
           long[] idEtudiants = etudiants.Select(x => x.Id).ToArray();
           return await ExecuteAsync(parcours.Id, idEtudiants); 
       }  

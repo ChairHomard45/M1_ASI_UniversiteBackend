@@ -6,9 +6,9 @@ namespace UniversiteDomain.UseCases.ParcoursUseCases.Create;
 
 public class CreateParcoursUseCase(IParcoursRepository parcoursRepository)
 {
-    public async Task<Parcours> ExecuteAsync(string nomPar, int AnneeFor)
+    public async Task<Parcours> ExecuteAsync(string nomPar, int anneeFor)
     {
-        var parcours = new Parcours{NomParcours = nomPar, AnneeFormation = AnneeFor};
+        var parcours = new Parcours{NomParcours = nomPar, AnneeFormation = anneeFor};
         return await ExecuteAsync(parcours);
     }
     public async Task<Parcours> ExecuteAsync(Parcours parcours)

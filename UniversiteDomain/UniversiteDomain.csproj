@@ -11,6 +11,7 @@
       <Folder Include="UseCases\EtudiantUseCases\Get\" />
       <Folder Include="UseCases\EtudiantUseCases\Update\" />
       <Folder Include="UseCases\ParcoursUseCases\Delete\" />
+      <Folder Include="UseCases\ParcoursUseCases\GestionDesParcours\" />
       <Folder Include="UseCases\ParcoursUseCases\Get\" />
       <Folder Include="UseCases\ParcoursUseCases\Update\" />
       <Folder Include="UseCases\UeUseCases\Delete\" />
