@@ -3,7 +3,7 @@ using UniversiteDomain.Entities;
 
 namespace UniversiteDomain.UseCases.ParcoursUseCases.Create;
 
-public class CreateParcoursUseCase(iParcoursRepository parcoursRepository)
+public class CreateParcoursUseCase(IParcoursRepository parcoursRepository)
 {
     public async Task<Parcours> ExecuteAsync(string nomPar, int AnneeFor)
     {
