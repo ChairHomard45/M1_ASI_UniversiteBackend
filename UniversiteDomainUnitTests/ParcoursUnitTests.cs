@@ -4,8 +4,8 @@ using UniversiteDomain.DataAdapters;
 using UniversiteDomain.DataAdapters.DataAdaptersFactory;
 using UniversiteDomain.Entities;
 using UniversiteDomain.UseCases.ParcoursUseCases.Create;
-using UniversiteDomain.UseCases.ParcoursUseCases.GestionDesParcours.EtudiantDansParcours;
-using UniversiteDomain.UseCases.ParcoursUseCases.GestionDesParcours.UeDansParcours;
+using UniversiteDomain.UseCases.ParcoursUseCases.EtudiantDansParcours;
+using UniversiteDomain.UseCases.ParcoursUseCases.UeDansParcours;
 
 namespace UniversiteDomainUnitTests;
 
@@ -100,6 +100,8 @@ public class ParcoursUnitTest
             .Setup(repo => repo.AddEtudiantAsync(idParcours, idEtudiant))
             .ReturnsAsync(parcoursFinal);
         
+        Console.WriteLine(parcoursFinal.Inscrits.Count);
+        
         // Création d'une fausse factory qui contient les faux repositories
         var mockFactory = new Mock<IRepositoryFactory>();
         mockFactory.Setup(facto=>facto.EtudiantRepository()).Returns(mockEtudiant.Object);
@@ -120,62 +122,47 @@ public class ParcoursUnitTest
     [Test]
     public async Task AddUeDansParcoursUseCase()
     {
-        long idUe = 8;
+        long idUe = 1;
         long idParcours = 3;
         
-        Ue ue = new Ue { Id = 5, NumeroUe = "14", Intitule = "15"};
-        Parcours parcours = new Parcours{Id=3, NomParcours = "Ue 3", AnneeFormation = 1};
+        Ue ue = new Ue { Id = idUe, NumeroUe = "14", Intitule = "15"};
+        Parcours parcours = new Parcours{Id=idParcours, NomParcours = "Ue 3", AnneeFormation = 1};
+
         
         // On initialise des faux repositories
         var mockUe = new Mock<IUeRepository>();
         var mockParcours = new Mock<IParcoursRepository>();
         
-        List<Ue> ues = new List<Ue>();
-        
-        ues.Add(new Ue{Id=9});
         
         mockUe
-            .Setup(repo=>repo.FindByConditionAsync(e=>e.Id.Equals(idUe)))
-            .ReturnsAsync(ues);
+            .Setup(repo=>repo.FindByConditionAsync(e => e.Id.Equals(idUe)))
+            .ReturnsAsync(new List<Ue> { ue });
 
-        List<Parcours> parcourses = new List<Parcours>();
-        parcourses.Add(parcours);
-        
-        List<Parcours> parcoursFinaux = new List<Parcours>();
-        Parcours parcoursFinal = parcours;
-        
-        parcoursFinal.UesEnseignees.Add(ue);
-        parcoursFinaux.Add(parcours);
-        
         mockParcours
-            .Setup(repo=>repo.FindByConditionAsync(e=>e.Id.Equals(idParcours)))
-            .ReturnsAsync(parcourses);
+            .Setup(repo => repo.FindByConditionAsync(e => e.Id.Equals(idParcours)))
+            .ReturnsAsync(new List<Parcours> { parcours });
+        
+        Parcours parcoursFinal = new Parcours{Id=idParcours, NomParcours = "Ue 3", AnneeFormation = 1};
+        
+        parcoursFinal.UesEnseignees = new List<Ue> { ue };
+        
+
         mockParcours
             .Setup(repo => repo.AddUeAsync(idParcours, idUe))
             .ReturnsAsync(parcoursFinal);
         
-        // Création d'une fausse factory qui contient les faux repositories
         var mockFactory = new Mock<IRepositoryFactory>();
         mockFactory.Setup(facto=>facto.UeRepository()).Returns(mockUe.Object);
         mockFactory.Setup(facto=>facto.ParcoursRepository()).Returns(mockParcours.Object);
         
-        // Création du use case en utilisant le mock comme datasource
         AddUeDansParcoursUseCase useCase=new AddUeDansParcoursUseCase(mockFactory.Object);
         
-        // Appel du use case
-        var parcoursTest=await useCase.ExecuteAsync(idParcours, idUe);
+        var parcoursTest=await useCase.ExecuteAsync(idParcours,  idUe);
         
-        Console.WriteLine("UesEnseignees:");
-        foreach (var ueEnseignee in parcoursTest.UesEnseignees)
-        {
-            Console.WriteLine($"Id: {ueEnseignee.Id}, NumeroUe: {ueEnseignee.NumeroUe}, Intitule: {ueEnseignee.Intitule}");
-        }
-        
-        // Vérification du résultat
         Assert.That(parcoursTest.Id, Is.EqualTo(parcoursFinal.Id));
         Assert.That(parcoursTest.UesEnseignees, Is.Not.Null);
         Assert.That(parcoursTest.UesEnseignees.Count, Is.EqualTo(1));
         Assert.That(parcoursTest.UesEnseignees[0].Id, Is.EqualTo(idUe));
-    
+
     }
 }
