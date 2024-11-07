@@ -69,6 +69,7 @@ public class AddNotesDansUeUseCase(IRepositoryFactory repositoryFactory)
         if (parcours is { Count: 0 }) throw new ParcoursNotFoundException(idUe.ToString());
         
         // Vérifie si la note existe déjà dans la liste de l'ue
+        /*
         if (ue[0].Notes != null)
         {
             var trouve= ue[0].Notes.FindAll(e=>e.Id.Equals(note[0].Id));
@@ -77,7 +78,7 @@ public class AddNotesDansUeUseCase(IRepositoryFactory repositoryFactory)
                 etudiant[0].Notes.RemoveAll(e => e.Id.Equals(note[0].Id));
                 ue[0].Notes.RemoveAll(e => e.Id.Equals(note[0].Id));
             }
-        }
+        }*/
         
     }
 

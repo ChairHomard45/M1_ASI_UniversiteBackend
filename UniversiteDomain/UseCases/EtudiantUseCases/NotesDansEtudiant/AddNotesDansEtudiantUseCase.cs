@@ -63,6 +63,7 @@ public class AddNotesDansEtudiantUseCase(IRepositoryFactory repositoryFactory)
         if (ue is { Count: 0 }) throw new UeNotFoundException(note[0].UeId.ToString());
         
         // Vérifie si la note existe déjà dans la liste de l'etudiant
+        /*
         if (etudiant[0].Notes != null)
         {
             var trouve= etudiant[0].Notes.FindAll(e=>e.Id.Equals(note[0].Id));
@@ -71,7 +72,7 @@ public class AddNotesDansEtudiantUseCase(IRepositoryFactory repositoryFactory)
                 etudiant[0].Notes.RemoveAll(e => e.Id.Equals(note[0].Id));
                 ue[0].Notes.RemoveAll(e => e.Id.Equals(note[0].Id));
             }
-        }
+        }*/
     }
 
 }
