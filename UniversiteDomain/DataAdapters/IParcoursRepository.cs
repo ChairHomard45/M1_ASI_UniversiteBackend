@@ -10,7 +10,7 @@ public interface IParcoursRepository : IRepository<Parcours>
     Task<Parcours> AddEtudiantAsync(long idParcours, long[] idEtudiants);
     
     /* ---- Add Ue to Parcours ---- */
-    Task<Parcours> AddUeAsync(Ue ue);
+    Task<Parcours> AddUeAsync(Parcours parcours, Ue ue);
     
     Task<Parcours> AddUeAsync(long idParcours, long idUe);
     Task<Parcours> AddUeAsync(long idParcours, long[] idUe);

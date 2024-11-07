@@ -54,7 +54,7 @@ public class AddUeDansParcoursUseCase(IRepositoryFactory repositoryFactory)
         if (ue == null) throw new UeNotFoundException(idUe.ToString());
         // On recherche le parcours
         List<Parcours> parcours = await repositoryFactory.ParcoursRepository().FindByConditionAsync(p=>p.Id.Equals(idParcours));
-        if (parcours ==null) throw new ParcoursNotFoundException(idParcours.ToString());
+        if (parcours == null) throw new ParcoursNotFoundException(idParcours.ToString());
         
         // On vérifie que l'Ue n'est pas déjà dans le parcours
         if (parcours[0].UesEnseignees!=null)

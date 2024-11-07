@@ -24,6 +24,8 @@ public class CreateParcoursUseCase(IParcoursRepository parcoursRepository)
         ArgumentNullException.ThrowIfNull(parcours.NomParcours);
         ArgumentNullException.ThrowIfNull(parcours.AnneeFormation);
         ArgumentNullException.ThrowIfNull(parcoursRepository);
+
+        if (parcours.AnneeFormation != 1 && parcours.AnneeFormation != 2) throw new InvalidAnneFormationException(" L'Année de Formation doit être 1 ou 2");
         
         List<Parcours> existe = await parcoursRepository.FindByConditionAsync(e=>e.NomParcours.Equals(parcours.NomParcours));
         
