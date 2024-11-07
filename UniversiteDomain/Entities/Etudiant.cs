@@ -9,7 +9,7 @@ public class Etudiant
     public string Email { get; set; } = string.Empty;
 
     // OneToMany : un étudiant a plusieurs notes
-    public List<Notes> Notes { get; set; } = new();
+    public List<Notes> NotesObtenues { get; set; } = new();
     
     // ManyToOne : l'étudiant est inscrit dans un parcours
     public Parcours? ParcoursSuivi { get; set; } = null;
