@@ -20,4 +20,49 @@ public class EtudiantRepository(UniversiteDbContext context) : Repository<Etudia
     {
         await AffecterParcoursAsync(etudiant.Id, parcours.Id); 
     }
+
+    /* ------ Normal Version ------*/
+    public async Task<Etudiant> AddNoteAsync(long Idetudiant, long Idnote)
+    {
+        ArgumentNullException.ThrowIfNull(Context.Etudiants);
+        ArgumentNullException.ThrowIfNull(Context.Notes);
+        Etudiant e = (await Context.Etudiants.FindAsync(Idetudiant))!;
+        Notes n = (await Context.Notes.FindAsync(Idnote))!;
+        e.NotesObtenues.Add(n);
+        await Context.SaveChangesAsync();
+        return e;
+    }
+    
+    public async Task<Etudiant> AddNoteAsync(Etudiant etudiant, Notes note)
+    {
+        return await AddNoteAsync(etudiant.Id, note.Id);
+    }
+    
+    /* ------ Lists Version ------*/
+
+    public async Task<Etudiant> AddNoteAsync(long IdEtudiant, long[] IdNotes)
+    {
+        ArgumentNullException.ThrowIfNull(Context.Etudiants);
+        ArgumentNullException.ThrowIfNull(Context.Notes);
+
+        Etudiant e = (await Context.Etudiants.FindAsync(IdEtudiant))!;
+        List<Notes> notes = new List<Notes>();
+
+        foreach (var id in IdNotes)
+        {
+            Notes note = (await Context.Notes.FindAsync(id))!;
+            notes.Add(note);
+        }
+
+        e.NotesObtenues.AddRange(notes);
+        await Context.SaveChangesAsync();
+        return e;
+    }
+    
+    public async Task<Etudiant> AddNoteAsync(Etudiant? etudiant, List<Notes> notes)
+    {
+        long[] noteIds = notes.Select(n => n.Id).ToArray();
+        return await AddNoteAsync(etudiant.Id, noteIds);
+    }
+    
 }
