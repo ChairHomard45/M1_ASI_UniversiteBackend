@@ -29,7 +29,7 @@ public class CreateUeUseCase(IUeRepository ueRepository)
         // On recherche une ue avec le même numéro
         List<Ue> existe = await ueRepository.FindByConditionAsync(e=>e.NumeroUe.Equals(ue.NumeroUe));
         
-        if (existe .Any()) throw new DuplicateNumeroUeException(ue.NumeroUe+ " - ce numéro d'étudiant est déjà affecté à un étudiant");
+        if (existe .Any()) throw new DuplicateNumeroUeException(ue.NumeroUe+ " - ce numéro d'Ue est déjà affecté à une Ue");
         
         if (ue.Intitule.Length < 3) throw new InvalidUeIntituleException(ue.Intitule +" incorrect - L'intitule doit contenir plus de 3 caractères");
         

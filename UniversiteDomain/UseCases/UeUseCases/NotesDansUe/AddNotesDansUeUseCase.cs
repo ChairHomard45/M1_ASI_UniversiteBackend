@@ -65,20 +65,21 @@ public class AddNotesDansUeUseCase(IRepositoryFactory repositoryFactory)
         if (etudiant is { Count: 0 }) throw new EtudiantNotFoundException(note[0].EtudiantId.ToString());
         
         // On vérifie si L'ue est dans le parcours de l'etudiant
-        List<Parcours> parcours = await repositoryFactory.ParcoursRepository().FindByConditionAsync(e => e.UesEnseignees.Equals(idUe) && e.Id.Equals(etudiant[0].ParcoursSuivi.Id));
+        List<Parcours> parcours = await repositoryFactory.ParcoursRepository().FindByConditionAsync(e => e.UesEnseignees.Equals(ue) && e.Id.Equals(etudiant[0].ParcoursSuivi.Id));
         if (parcours is { Count: 0 }) throw new ParcoursNotFoundException(idUe.ToString());
         
         // Vérifie si la note existe déjà dans la liste de l'ue
-        /*
+        
         if (ue[0].Notes != null)
         {
             var trouve= ue[0].Notes.FindAll(e=>e.Id.Equals(note[0].Id));
-
+            if (trouve.Count() != 0) throw new DuplicateNoteException(note[0].ToString() + "Existe déjà dans la liste de l'ue");
+            /*
             if (trouve.Count() != 0) {
                 etudiant[0].Notes.RemoveAll(e => e.Id.Equals(note[0].Id));
                 ue[0].Notes.RemoveAll(e => e.Id.Equals(note[0].Id));
-            }
-        }*/
+            }*/
+        }
         
     }
 

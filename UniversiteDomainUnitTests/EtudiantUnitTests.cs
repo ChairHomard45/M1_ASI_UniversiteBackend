@@ -1,9 +1,11 @@
 using System.Linq.Expressions;
 using Moq;
 using UniversiteDomain.DataAdapters;
+using UniversiteDomain.DataAdapters.DataAdaptersFactory;
 using UniversiteDomain.Entities;
 using UniversiteDomain.UseCases.EtudiantUseCases;
 using UniversiteDomain.UseCases.EtudiantUseCases.Create;
+using UniversiteDomain.UseCases.EtudiantUseCases.NotesDansEtudiant;
 
 namespace UniversiteDomainUnitTests;
 
@@ -60,6 +62,12 @@ public class EtudiantUnitTest
         Assert.That(etudiantTeste.Nom, Is.EqualTo(etudiantCree.Nom));
         Assert.That(etudiantTeste.Prenom, Is.EqualTo(etudiantCree.Prenom));
         Assert.That(etudiantTeste.Email, Is.EqualTo(etudiantCree.Email));
+    }
+    
+    [Test]
+    public async Task AddNotesDansEtudiantUseCase()
+    {
+  
     }
 
 }
