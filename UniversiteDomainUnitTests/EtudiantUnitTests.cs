@@ -69,5 +69,8 @@ public class EtudiantUnitTest
     {
   
     }
+    
+    [Test]
+    public async Task AddNotesDansEtudiant(){}
 
 }
