@@ -45,7 +45,7 @@ namespace UniversiteRestApi.Controllers
             }
             EtudiantDto dto = new EtudiantDto().ToDto(etud);
             // On revoie la route vers le get qu'on n'a pas encore écrit!
-            return CreatedAtAction(nameof(GetUnEtudiant), new { id = dto.Id }, dto);
+            return dto; //CreatedAtAction(nameof(GetUnEtudiant), new { id = dto.Id }, dto);
         }
 
         // PUT api/<EtudiantController>/5

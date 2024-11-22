@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol.Core.Types;
 using UniversiteDomain.DataAdapters;
 using UniversiteDomain.DataAdapters.DataAdaptersFactory;
+using UniversiteDomain.JeuxDeDonnees;
 using UniversiteEFDataProvider.Data;
 using UniversiteEFDataProvider.RepositoryFactories;
 
@@ -41,6 +42,7 @@ app.UseSwaggerUI();
 
 // Initisation de la base de données
 // A commenter si vous ne voulez pas vider la base à chaque Run!
+/*
 using(var scope = app.Services.CreateScope())
 {
     // On récupère le logger pour afficher des messages. On l'a mis dans les services de l'application
@@ -54,7 +56,18 @@ using(var scope = app.Services.CreateScope())
     // Recréation des tables vides
     logger.LogInformation("Création de la BD et des tables à partir des entities");
     await context.Database.EnsureCreatedAsync();
-}
+}*/
 
+    // Initisation de la base de données
+    ILogger logger = app.Services.GetRequiredService<ILogger<BdBuilder>>();
+    logger.LogInformation("Chargement des données de test");
+    using(var scope = app.Services.CreateScope())
+    {
+        UniversiteDbContext context = scope.ServiceProvider.GetRequiredService<UniversiteDbContext>();
+        IRepositoryFactory repositoryFactory = scope.ServiceProvider.GetRequiredService<IRepositoryFactory>();   
+        // C'est ici que vous changez le jeu de données pour démarrer sur une base vide par exemple
+        BdBuilder seedBD = new BasicBdBuilder(repositoryFactory);
+        await seedBD.BuildUniversiteBdAsync();
+    }
 // Exécution de l'application
 app.Run();
