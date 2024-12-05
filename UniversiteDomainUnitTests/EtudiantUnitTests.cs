@@ -49,10 +49,11 @@ public class EtudiantUnitTest
         mock.Setup(repoEtudiant=>repoEtudiant.CreateAsync(etudiantSansId)).ReturnsAsync(etudiantCree);
         
         // On crée le bouchon (un faux etudiantRepository). Il est prêt à être utilisé
-        var fauxEtudiantRepository = mock.Object;
+        var mockFactory = new Mock<IRepositoryFactory>();
+        mockFactory.Setup(facto=>facto.EtudiantRepository()).Returns(mock.Object);
         
         // Création du use case en injectant notre faux repository
-        CreateEtudiantUseCase useCase=new CreateEtudiantUseCase(fauxEtudiantRepository);
+        CreateEtudiantUseCase useCase=new CreateEtudiantUseCase(mockFactory.Object);
         // Appel du use case
         var etudiantTeste=await useCase.ExecuteAsync(etudiantSansId);
         

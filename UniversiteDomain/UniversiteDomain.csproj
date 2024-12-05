@@ -7,9 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="UseCases\EtudiantUseCases\Delete\" />
-      <Folder Include="UseCases\EtudiantUseCases\Get\" />
-      <Folder Include="UseCases\EtudiantUseCases\Update\" />
       <Folder Include="UseCases\NotesUseCases\Delete\" />
       <Folder Include="UseCases\NotesUseCases\Get\" />
       <Folder Include="UseCases\NotesUseCases\Update\" />
@@ -22,6 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.8" />
       <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.8" />
       <PackageReference Include="MySql.EntityFrameworkCore" Version="8.0.8" />
     </ItemGroup>

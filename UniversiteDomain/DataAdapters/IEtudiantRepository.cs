@@ -7,4 +7,5 @@ public interface IEtudiantRepository : IRepository<Etudiant>
     Task<Etudiant> AddNoteAsync(Etudiant etudiant, Notes note);
     Task<Etudiant> AddNoteAsync(Etudiant? etudiant, List<Notes> notes);
     Task<Etudiant> AddNoteAsync(long IdEtudiant, long[] IdNotes);
+    public Task<Etudiant?> FindEtudiantCompletAsync(long idEtudiant);
 }

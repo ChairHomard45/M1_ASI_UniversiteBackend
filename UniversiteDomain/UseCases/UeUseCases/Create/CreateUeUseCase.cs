@@ -1,10 +1,11 @@
 using UniversiteDomain.DataAdapters;
+using UniversiteDomain.DataAdapters.DataAdaptersFactory;
 using UniversiteDomain.Entities;
 using UniversiteDomain.Exceptions.UeExceptions;
 
 namespace UniversiteDomain.UseCases.UeUseCases.Create;
 
-public class CreateUeUseCase(IUeRepository ueRepository)
+public class CreateUeUseCase(IRepositoryFactory factoryRepository)
 {
     public async Task<Ue> ExecuteAsync()
     {
@@ -14,8 +15,8 @@ public class CreateUeUseCase(IUeRepository ueRepository)
     public async Task<Ue> ExecuteAsync(Ue uee)
     {
         await CheckBusinessRules(uee);
-        Ue ue = await ueRepository.CreateAsync(uee);
-        ueRepository.SaveChangesAsync().Wait();
+        Ue ue = await factoryRepository.UeRepository().CreateAsync(uee);
+        factoryRepository.UeRepository().SaveChangesAsync().Wait();
         return ue;
     }
     private async Task CheckBusinessRules(Ue ue)
@@ -23,15 +24,20 @@ public class CreateUeUseCase(IUeRepository ueRepository)
         ArgumentNullException.ThrowIfNull(ue);
         ArgumentNullException.ThrowIfNull(ue.NumeroUe);
         ArgumentNullException.ThrowIfNull(ue.Intitule);
-        ArgumentNullException.ThrowIfNull(ueRepository);
+        ArgumentNullException.ThrowIfNull(factoryRepository.UeRepository());
         
         
         // On recherche une ue avec le même numéro
-        List<Ue> existe = await ueRepository.FindByConditionAsync(e=>e.NumeroUe.Equals(ue.NumeroUe));
+        List<Ue> existe = await factoryRepository.UeRepository().FindByConditionAsync(e=>e.NumeroUe.Equals(ue.NumeroUe));
         
         if (existe .Any()) throw new DuplicateNumeroUeException(ue.NumeroUe+ " - ce numéro d'Ue est déjà affecté à une Ue");
         
         if (ue.Intitule.Length < 3) throw new InvalidUeIntituleException(ue.Intitule +" incorrect - L'intitule doit contenir plus de 3 caractères");
         
+    }    
+    
+    public bool IsAuthorized(string role)
+    {
+        return role.Equals(Roles.Responsable) || role.Equals(Roles.Scolarite);
     }
 }

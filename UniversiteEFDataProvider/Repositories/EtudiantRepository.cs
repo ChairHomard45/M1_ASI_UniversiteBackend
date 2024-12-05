@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using UniversiteDomain.DataAdapters;
 using UniversiteDomain.Entities;
 using UniversiteEFDataProvider.Data;
@@ -6,6 +7,7 @@ namespace UniversiteEFDataProvider.Repositories;
 
 public class EtudiantRepository(UniversiteDbContext context) : Repository<Etudiant>(context), IEtudiantRepository
 {
+    
     public async Task AffecterParcoursAsync(long idEtudiant, long idParcours)
     {
         ArgumentNullException.ThrowIfNull(Context.Etudiants);
@@ -63,6 +65,12 @@ public class EtudiantRepository(UniversiteDbContext context) : Repository<Etudia
     {
         long[] noteIds = notes.Select(n => n.Id).ToArray();
         return await AddNoteAsync(etudiant.Id, noteIds);
+    }
+    
+    public async Task<Etudiant?> FindEtudiantCompletAsync(long idEtudiant)
+    {
+        ArgumentNullException.ThrowIfNull(Context.Etudiants);
+        return await Context.Etudiants.Include(e => e.NotesObtenues).ThenInclude(n=>n.Ue).FirstOrDefaultAsync(e => e.Id == idEtudiant);
     }
     
 }

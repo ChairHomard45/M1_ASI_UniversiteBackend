@@ -1,13 +1,11 @@
 using UniversiteDomain.DataAdapters.DataAdaptersFactory;
 using UniversiteDomain.Entities;
-//using UniversiteDomain.Entities.SecurityEntities;
 using UniversiteDomain.UseCases.EtudiantUseCases.Create;
-using UniversiteDomain.UseCases.NotesUseCases;
 using UniversiteDomain.UseCases.NotesUseCases.Create;
 using UniversiteDomain.UseCases.ParcoursUseCases.Create;
 using UniversiteDomain.UseCases.ParcoursUseCases.EtudiantDansParcours;
 using UniversiteDomain.UseCases.ParcoursUseCases.UeDansParcours;
-//using UniversiteDomain.UseCases.SecurityUseCases;
+using UniversiteDomain.UseCases.SecurityUseCases.Create;
 using UniversiteDomain.UseCases.UeUseCases.Create;
 
 namespace UniversiteDomain.JeuxDeDonnees;
@@ -37,7 +35,8 @@ public class BasicBdBuilder(IRepositoryFactory repositoryFactory) : BdBuilder(re
         new UserNonEtudiant { UserName = "plouisberquez@gmail.com", Email = "plouisberquez@gmail.com", Role = "Responsable" },
         new UserNonEtudiant { UserName = "jabin.julian.univ@gmail.com", Email = "jabin.julian.univ@gmail.com", Role = "Responsable" },
         new UserNonEtudiant { UserName = "mehdy.chk@outlook.fr", Email = "mehdy.chk@outlook.fr", Role = "Responsable" },
-        new UserNonEtudiant { UserName = "stephanie.dertin@u-picardie.fr", Email = "stephanie.dertin@u-picardie.fr", Role = "Scolarite" }
+        new UserNonEtudiant { UserName = "stephanie.dertin@u-picardie.fr", Email = "stephanie.dertin@u-picardie.fr", Role = "Scolarite" },
+        new UserNonEtudiant { UserName = "ClementDelepaut", Email = "delepaut.clement@gmail.com", Role = "Scolarite" },
     ];
 
     private readonly Parcours[] _parcours =
@@ -118,21 +117,21 @@ public class BasicBdBuilder(IRepositoryFactory repositoryFactory) : BdBuilder(re
     {
         foreach (Etudiant e in _etudiants)
         {
-            await new CreateEtudiantUseCase(repositoryFactory.EtudiantRepository()).ExecuteAsync(e);
+            await new CreateEtudiantUseCase(repositoryFactory).ExecuteAsync(e);
         }
     }
     protected override async Task BuildParcoursAsync()
     {
         foreach (Parcours parcours in _parcours)
         {
-            await new CreateParcoursUseCase(repositoryFactory.ParcoursRepository()).ExecuteAsync(parcours);
+            await new CreateParcoursUseCase(repositoryFactory).ExecuteAsync(parcours);
         }
     }
     protected override async Task BuildUesAsync()
     {
         foreach (Ue ue in _ues)
         {
-            await new CreateUeUseCase(repositoryFactory.UeRepository()).ExecuteAsync(ue);
+            await new CreateUeUseCase(repositoryFactory).ExecuteAsync(ue);
         }
     }
 
@@ -155,25 +154,20 @@ public class BasicBdBuilder(IRepositoryFactory repositoryFactory) : BdBuilder(re
     {
         foreach( var note in _notes)
         {
-            await new CreateNotesUseCase(repositoryFactory).ExecuteAsync(note.Valeur, note.EtudiantId, note.UeId);
+            await new CreateNotesUseCase(repositoryFactory).ExecuteAsync(note.Valeur, note.EtudiantId,note.UeId);
         }
     }
     
     protected override async Task BuildRolesAsync()
     {
-				/*
-				// A décommenter quand on aura rajouté les rôles
         // Création des rôles dans la table aspnetroles
         await new CreateUniversiteRoleUseCase(repositoryFactory).ExecuteAsync(Roles.Responsable);
         await new CreateUniversiteRoleUseCase(repositoryFactory).ExecuteAsync(Roles.Scolarite);
         await new CreateUniversiteRoleUseCase(repositoryFactory).ExecuteAsync(Roles.Etudiant);
-				*/
     }
 
     protected override async Task BuildUsersAsync()
     {
-				/*
-				// A décommenter quand on aura rajouté les Users
         CreateUniversiteUserUseCase uc = new CreateUniversiteUserUseCase(repositoryFactory);
         // Création des étudiants
         foreach (var etudiant in _etudiants)
@@ -186,6 +180,5 @@ public class BasicBdBuilder(IRepositoryFactory repositoryFactory) : BdBuilder(re
         {
             await uc.ExecuteAsync(user.Email, user.Email, this.Password, user.Role, null);
         }
-				*/
     }
 }
