@@ -6,7 +6,10 @@ using UniversiteEFDataProvider.Entities;
 
 namespace UniversiteEFDataProvider.Repositories;
 
-public class UniversiteUserRepository(UniversiteDbContext context, UserManager<UniversiteUser> userManager, RoleManager<UniversiteRole> roleManager) : Repository<IUniversiteUser>(context), IUniversiteUserRepository
+public class UniversiteUserRepository(UniversiteDbContext context, 
+                                      UserManager<UniversiteUser> userManager, 
+                                      RoleManager<UniversiteRole> roleManager) : 
+    Repository<IUniversiteUser>(context), IUniversiteUserRepository
 {
     public async Task<IUniversiteUser?> AddUserAsync(string login, string email, string password, string role,  Etudiant? etudiant)
     {
@@ -19,14 +22,13 @@ public class UniversiteUserRepository(UniversiteDbContext context, UserManager<U
         }
         await context.SaveChangesAsync();
         return result.Succeeded ? user : null;
-        return user;
     }
 
     public async Task<IUniversiteUser> FindByEmailAsync(string email)
     {
         return await userManager.FindByEmailAsync(email);
     }
-    
+
     public async Task UpdateAsync(IUniversiteUser entity, string userName, string email)
     {
         UniversiteUser user = (UniversiteUser)entity;

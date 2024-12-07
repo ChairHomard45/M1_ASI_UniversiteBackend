@@ -6,10 +6,11 @@ namespace UniversiteDomain.UseCases.EtudiantUseCases.Update;
 
 public class UpdateEtudiantUseCase(IRepositoryFactory factory)
 {
-    public async Task ExecuteAsync(Etudiant Etudiant)
+    public async Task ExecuteAsync(Etudiant etudiant)
     {
         await CheckBusinessRules();
-        await factory.EtudiantRepository().UpdateAsync(Etudiant);
+        
+        await factory.EtudiantRepository().UpdateAsync(etudiant);
         await factory.EtudiantRepository().SaveChangesAsync();
     }
     private async Task CheckBusinessRules()
