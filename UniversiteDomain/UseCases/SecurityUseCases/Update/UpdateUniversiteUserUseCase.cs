@@ -8,19 +8,18 @@ public class UpdateUniversiteUserUseCase(IRepositoryFactory factory)
 {
     public async Task ExecuteAsync(Etudiant etudiant)
     {
-        await CheckBusinessRules(etudiant);
+        await CheckBusinessRules();
+        var user = await factory.UniversiteUserRepository().FindByEmailAsync(etudiant.Email);
+        if (user == null) throw new NullReferenceException("L'utilisateur n'existe pas");
+        
+        await factory.UniversiteUserRepository().UpdateAsync(user, etudiant.Email, etudiant.Email);
+        //await factory.UniversiteUserRepository().SaveChangesAsync();
     }
-    private async Task CheckBusinessRules(Etudiant etudiant)
+    private async Task CheckBusinessRules()
     {
         ArgumentNullException.ThrowIfNull(factory);
         IUniversiteUserRepository userRepository=factory.UniversiteUserRepository();
         ArgumentNullException.ThrowIfNull(userRepository);
-        
-        var user = await userRepository.FindByEmailAsync(etudiant.Email);
-        if (user == null) throw new NullReferenceException("User does not exist");
-        
-        await userRepository.UpdateAsync(user, etudiant.Email, etudiant.Email);
-        await userRepository.SaveChangesAsync();
     }
     
     public bool IsAuthorized(string role)
