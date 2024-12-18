@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using UniversiteDomain.DataAdapters;
 using UniversiteDomain.Entities;
 using UniversiteEFDataProvider.Data;
@@ -48,5 +49,11 @@ public class UeRepository(UniversiteDbContext context) : Repository<Ue>(context)
     {
         long[] noteIds = notes.Select(n => n.Id).ToArray();
         return await AddNoteAsync(ue.Id, noteIds);
+    }
+    
+    public async Task<Ue?> FindUeCompletAsync(long idUe)
+    {
+        ArgumentNullException.ThrowIfNull(Context.Ues);
+        return await Context.Ues.Include(e => e.EnseigneeDans).Include(e => e.Notes).ThenInclude(ue => ue.Etudiant).FirstOrDefaultAsync(e => e.Id == idUe);
     }
 }
