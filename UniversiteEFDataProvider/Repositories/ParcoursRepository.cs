@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using UniversiteDomain.DataAdapters;
 using UniversiteDomain.Entities;
 using UniversiteEFDataProvider.Data;
@@ -94,4 +95,10 @@ public class ParcoursRepository(UniversiteDbContext context) : Repository<Parcou
         return await AddUeAsync(parcours.Id, ueIds);
     }
     
+    
+    public async Task<Parcours?> FindParcoursCompletAsync(long idParcours)
+    {
+        ArgumentNullException.ThrowIfNull(Context.Parcours);
+        return await Context.Parcours.Include(p => p.Inscrits).Include(t => t.UesEnseignees).FirstOrDefaultAsync(p => p.Id == idParcours);
+    }
 }

@@ -21,7 +21,8 @@ public class BasicBdBuilder(IRepositoryFactory repositoryFactory) : BdBuilder(re
         new Etudiant { Id=3,NumEtud = "62830483", Nom = "Barassi", Prenom = "Pierre-Louis", Email = "pierre-louis.barassi@etud.u-picardie.fr" },
         new Etudiant { Id=4,NumEtud = "J6HZK922", Nom = "Jelong", Prenom = "Antony", Email = "antony.jelong@etud.u-picardie.fr" },
         new Etudiant { Id=5,NumEtud = "PAD89345", Nom = "Akki", Prenom = "Pita", Email = "pita.akki@etud.u-picardie.fr" },
-        new Etudiant { Id=6,NumEtud = "RG8647FF", Nom = "Mauvaka", Prenom = "Peato", Email = "peato.mauvaka@etud.u-picardie.fr" }
+        new Etudiant { Id=6,NumEtud = "RG8647FF", Nom = "Mauvaka", Prenom = "Peato", Email = "peato.mauvaka@etud.u-picardie.fr" },
+        new Etudiant { Id=7,NumEtud = "GCLEM740", Nom = "Clement", Prenom = "Delepaut", Email = "delepaut.clement@etud.u-picardie.fr" }
     ];
     private struct UserNonEtudiant
     {
@@ -69,7 +70,8 @@ public class BasicBdBuilder(IRepositoryFactory repositoryFactory) : BdBuilder(re
         new Inscription { EtudiantId = 3, ParcoursId = 1 },
         new Inscription { EtudiantId = 4, ParcoursId = 1 },
         new Inscription { EtudiantId = 5, ParcoursId = 3 },
-        new Inscription { EtudiantId = 6, ParcoursId = 4 }
+        new Inscription { EtudiantId = 6, ParcoursId = 4 },
+        new Inscription { EtudiantId = 7, ParcoursId = 4 }
     ];
 
     private struct UeDansParcours
@@ -98,7 +100,6 @@ public class BasicBdBuilder(IRepositoryFactory repositoryFactory) : BdBuilder(re
     private readonly Note[] _notes =
     [
         new Note { UeId = 1, EtudiantId = 2, Valeur = 12 },
-        new Note { UeId = 1, EtudiantId = 3, Valeur = (float)8.5 },
         new Note { UeId = 1, EtudiantId = 4, Valeur = 16 },
         new Note { UeId = 2, EtudiantId = 2, Valeur = 14 },
         new Note { UeId = 2, EtudiantId = 3, Valeur = 6 },

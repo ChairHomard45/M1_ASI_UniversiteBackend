@@ -48,6 +48,12 @@ var app = builder.Build();
 app.UseHttpsRedirection();
 app.MapControllers();
 
+app.UseCors(policy =>
+        policy.WithOrigins("http://localhost:5173") // Allow requests from the frontend (adjust as needed)
+            .AllowAnyMethod()  // Allow any HTTP methods (GET, POST, etc.)
+            .AllowAnyHeader()  // Allow any headers in the request
+);
+
 // Configuration de Swagger.
 // Commentez les deux lignes ci-dessous pour désactiver Swagger (en production par exemple)
 app.UseSwagger();
