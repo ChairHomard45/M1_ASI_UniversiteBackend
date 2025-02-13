@@ -1,6 +1,8 @@
 using UniversiteDomain.DataAdapters;
 using UniversiteDomain.DataAdapters.DataAdaptersFactory;
 using UniversiteDomain.Entities;
+using UniversiteDomain.Exceptions.EtudiantExceptions;
+using UniversiteDomain.UseCases.NotesUseCases.Delete;
 
 namespace UniversiteDomain.UseCases.EtudiantUseCases.Delete;
 
@@ -8,7 +10,20 @@ public class DeleteEtudiantUseCase(IRepositoryFactory factory)
 {
     public async Task ExecuteAsync(long idEtudiant)
     {
+        DeleteNoteUseCase deleteNoteUseCase = new DeleteNoteUseCase(factory);
         await CheckBusinessRules();
+        
+        Etudiant etud = await factory.EtudiantRepository().FindAsync(idEtudiant);
+        if (etud == null) throw new EtudiantNotFoundException("Etudiant not found");
+
+        etud.ParcoursSuivi = null;
+        foreach (var note in etud.NotesObtenues)
+        {
+            await deleteNoteUseCase.ExecuteAsync(note);
+        }
+        await factory.EtudiantRepository().UpdateAsync(etud);
+        await factory.EtudiantRepository().SaveChangesAsync();
+        
         await factory.EtudiantRepository().DeleteAsync(idEtudiant);
         await factory.EtudiantRepository().SaveChangesAsync();
     }
