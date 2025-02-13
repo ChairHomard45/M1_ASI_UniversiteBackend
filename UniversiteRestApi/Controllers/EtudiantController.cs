@@ -104,7 +104,7 @@ namespace UniversiteRestApi.Controllers
             GetEtudiantCompletUseCase uc = new GetEtudiantCompletUseCase(repositoryFactory);
 
             // On vérifie si l'utilisateur connecté a le droit d'accéder à la ressource
-            //if (!uc.IsAuthorized(role, user, id)) return Unauthorized();
+            if (!uc.IsAuthorized(role, user, id)) return Unauthorized();
             Etudiant? etud;
             try
             {
