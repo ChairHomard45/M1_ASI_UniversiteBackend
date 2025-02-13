@@ -70,7 +70,7 @@ public class EtudiantRepository(UniversiteDbContext context) : Repository<Etudia
     public async Task<Etudiant?> FindEtudiantCompletAsync(long idEtudiant)
     {
         ArgumentNullException.ThrowIfNull(Context.Etudiants);
-        return await Context.Etudiants.Include(e => e.NotesObtenues).ThenInclude(n=>n.Ue).FirstOrDefaultAsync(e => e.Id == idEtudiant);
+        return await Context.Etudiants.Include(e => e.NotesObtenues).ThenInclude(n=>n.Ue).Include(p => p.ParcoursSuivi).FirstOrDefaultAsync(e => e.Id == idEtudiant);
     }
 
     public async Task<List<Etudiant>> FindEtudiantsByNumUeAsync(string numUe)

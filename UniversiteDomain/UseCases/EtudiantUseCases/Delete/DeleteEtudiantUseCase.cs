@@ -13,11 +13,12 @@ public class DeleteEtudiantUseCase(IRepositoryFactory factory)
         DeleteNoteUseCase deleteNoteUseCase = new DeleteNoteUseCase(factory);
         await CheckBusinessRules();
         
-        Etudiant etud = await factory.EtudiantRepository().FindAsync(idEtudiant);
+        Etudiant? etud = await factory.EtudiantRepository().FindEtudiantCompletAsync(idEtudiant);
         if (etud == null) throw new EtudiantNotFoundException("Etudiant not found");
 
         etud.ParcoursSuivi = null;
-        foreach (var note in etud.NotesObtenues)
+        var tempNotes = etud.NotesObtenues.ToList();
+        foreach (var note in tempNotes)
         {
             await deleteNoteUseCase.ExecuteAsync(note);
         }
