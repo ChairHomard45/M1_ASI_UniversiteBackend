@@ -30,6 +30,7 @@ builder.Services.AddScoped<IRepositoryFactory, RepositoryFactory>();
 
 // Sécurisation
 builder.Services.AddAuthorization();
+builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme);
 builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
     .AddCookie(IdentityConstants.ApplicationScheme)
     .AddBearerToken(IdentityConstants.BearerScheme);

@@ -84,7 +84,7 @@ public class ParcoursRepository(UniversiteDbContext context) : Repository<Parcou
             ues.Add(ue);
         }
 
-        e.UesEnseignees.AddRange(ues);
+        e.UesEnseignees?.AddRange(ues);
         await Context.SaveChangesAsync();
         return e;
     }
