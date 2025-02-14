@@ -10,7 +10,7 @@ public class EtudiantCompletDto
     public string Prenom { get; set; }
     public string Email { get; set; }
     public ParcoursDto ParcoursSuivi { get; set; }
-    public List<NoteAvecUeDto> NotesObtenues { get; set; }=new();
+    public List<NoteAvecUeDto> NotesObtenues { get; set; } = new();
 
     public EtudiantCompletDto ToDto(Etudiant etudiant)
     {
