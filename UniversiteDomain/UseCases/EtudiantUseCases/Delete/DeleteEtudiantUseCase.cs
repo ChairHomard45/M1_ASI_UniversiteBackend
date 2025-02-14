@@ -17,6 +17,7 @@ public class DeleteEtudiantUseCase(IRepositoryFactory factory)
         if (etud == null) throw new EtudiantNotFoundException("Etudiant not found");
 
         etud.ParcoursSuivi = null;
+        
         var tempNotes = etud.NotesObtenues.ToList();
         foreach (var note in tempNotes)
         {
@@ -24,7 +25,7 @@ public class DeleteEtudiantUseCase(IRepositoryFactory factory)
         }
         await factory.EtudiantRepository().UpdateAsync(etud);
         await factory.EtudiantRepository().SaveChangesAsync();
-        
+
         await factory.EtudiantRepository().DeleteAsync(idEtudiant);
         await factory.EtudiantRepository().SaveChangesAsync();
     }
