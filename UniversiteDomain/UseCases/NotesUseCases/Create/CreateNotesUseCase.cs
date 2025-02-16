@@ -11,19 +11,57 @@ public class CreateNotesUseCase(IRepositoryFactory repositoryFactory)
 {
     public async Task<Notes> ExecuteAsync(float valeur, long EtudiantId, long UeId)
     {
-        List<Ue> ue = await repositoryFactory.UeRepository().FindByConditionAsync(e=>e.Id.Equals(UeId));
-        if (ue is { Count: 0 }) throw new UeNotFoundException(UeId.ToString());
+        var existingNotes = await repositoryFactory.NotesRepository()
+            .FindByConditionAsync(n => n.EtudiantId == EtudiantId && n.UeId == UeId);
+
+        if (existingNotes.Any()) // If a note already exists, update instead of creating
+        {
+            var existingNote = existingNotes.First();
+            existingNote.Valeur = valeur;
+            await repositoryFactory.NotesRepository().UpdateAsync(existingNote);
+            return existingNote;
+        }
+
+        // If no existing note, proceed with creating a new one
+        var ue = await repositoryFactory.UeRepository().FindByConditionAsync(e => e.Id == UeId);
+        if (!ue.Any()) throw new UeNotFoundException(UeId.ToString());
+
+        var etudiant = await repositoryFactory.EtudiantRepository().FindByConditionAsync(e => e.Id == EtudiantId);
+        if (!etudiant.Any()) throw new EtudiantNotFoundException(EtudiantId.ToString());
+
+        var note = new Notes
+        {
+            Valeur = valeur,
+            EtudiantId = EtudiantId,
+            UeId = UeId,
+            Etudiant = etudiant.First(),
+            Ue = ue.First()
+        };
         
-        List<Etudiant> etudiant = await repositoryFactory.EtudiantRepository().FindByConditionAsync(e => e.Id.Equals(EtudiantId));
-        if (etudiant is { Count: 0 }) throw new EtudiantNotFoundException(EtudiantId.ToString());
-        
-        var note = new Notes{ Valeur = valeur, EtudiantId = EtudiantId, UeId = UeId, Etudiant = etudiant[0] , Ue = ue[0]};
-        return await ExecuteAsync(note);
+        await repositoryFactory.NotesRepository().CreateAsync(note);
+        return note;
     }
+
     public async Task<Notes> ExecuteAsync(Notes note)
     {
         await CheckBusinessRules(note);
         Notes et = await repositoryFactory.NotesRepository().CreateAsync(note);
+        
+        var ue = await repositoryFactory.UeRepository().FindByConditionAsync(e => e.Id == note.UeId);
+        var etudiant = await repositoryFactory.EtudiantRepository().FindByConditionAsync(e => e.Id == note.EtudiantId);
+
+        if (ue.Any() && etudiant.Any())
+        {
+            var ueEntity = ue.First();
+            var etudiantEntity = etudiant.First();
+
+            ueEntity.Notes.Add(et);
+            etudiantEntity.NotesObtenues.Add(et);
+
+            await repositoryFactory.UeRepository().UpdateAsync(ueEntity);
+            await repositoryFactory.EtudiantRepository().UpdateAsync(etudiantEntity);
+        }
+        
         return et;
     }
 
