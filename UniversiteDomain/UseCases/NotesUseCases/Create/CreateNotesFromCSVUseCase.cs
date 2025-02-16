@@ -76,7 +76,7 @@ public class CreateNotesFromCsvUseCase(IRepositoryFactory factory)
                     
                     Console.WriteLine($"Création de note réussi pour {record.NumEtud}: {record.Note}");
                 }
-
+                await factory.NotesRepository().SaveChangesAsync();
             }
 
         }

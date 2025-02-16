@@ -21,7 +21,6 @@ public class UpdateNoteUseCase(IRepositoryFactory factory) {
             notesToUpdate[0].Valeur = note.Valeur;
             
             await factory.NotesRepository().UpdateAsync(notesToUpdate[0]);
-            await factory.NotesRepository().SaveChangesAsync();
         }
         private async Task CheckBusinessRules()
         {

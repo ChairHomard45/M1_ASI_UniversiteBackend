@@ -10,7 +10,6 @@ public class DeleteNoteUseCase(IRepositoryFactory factory)
     {
         await CheckBusinessRules(note);
         await factory.NotesRepository().DeleteAsync(note);
-        await factory.NotesRepository().SaveChangesAsync();
     }
     private async Task CheckBusinessRules(Notes note)
     {

@@ -24,7 +24,6 @@ public class CreateNotesUseCase(IRepositoryFactory repositoryFactory)
     {
         await CheckBusinessRules(note);
         Notes et = await repositoryFactory.NotesRepository().CreateAsync(note);
-        repositoryFactory.NotesRepository().SaveChangesAsync().Wait();
         return et;
     }
 
